@@ -1,4 +1,4 @@
-# Automated Google Cloud Instance provision complete with public IP and DNS entries
+# GCE for Dummies
 
 Before you can use this, you'll need to install a few things:
 
