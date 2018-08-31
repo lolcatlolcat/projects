@@ -1,0 +1,5 @@
+#Ignore my facts cache
+.json_facts/
+
+#Ignore my ansible.cfg
+ansible.cfg

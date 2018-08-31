@@ -1,0 +1,12 @@
+---
+- include: msf.yml
+  name: Install MSF
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- include: set.yml
+  name: Install S.E.T
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- include: posh_empire.yml
+  name: Install Powershell Empire
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'

@@ -1,0 +1,11 @@
+---
+- block:
+    - name: Clone GIT Repository
+      git:
+        repo: "https://github.com/EmpireProject/Empire.git"
+        dest: /tmp/empire
+
+    - name: Run auto-install script
+      shell: bash install.sh
+      args:
+        chdir: /tmp/empire/setup

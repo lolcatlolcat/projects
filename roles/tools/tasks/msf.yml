@@ -1,0 +1,21 @@
+---
+- block:
+    - name: Get MSF auto-install script
+      get_url:
+        url: https://raw.githubusercontent.com/rapid7/metasploit-omnibus/master/config/templates/metasploit-framework-wrappers/msfupdate.erb
+        dest: /tmp/msfinstall
+        mode: 0755
+
+    - name: Install MSF from script
+      shell: ./msfinstall
+      creates: "/opt/metasplot-framework/msfconsole"
+      args:
+        executable: /bin/bash
+        chdir: /tmp
+
+    - name: Add MSF to $PATH
+      shell: bash -c 'for MSF in $(ls msf*); do ln -s /opt/metasploit-framework/$MSF /usr/local/bin/$MSF;done'
+      creates: "/usr/local/bin/msfconsole"
+      args:
+        executable: /bin/bash
+        chdir: /opt/metasploit-framework

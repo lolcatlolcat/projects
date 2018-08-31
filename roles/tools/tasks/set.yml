@@ -1,0 +1,32 @@
+---
+- block:
+    - name: Install dependencies
+      apt:
+        name: "{{item}}"
+        update_cache: yes
+      with_items:
+        - git
+        - apache2
+        - 'python-requests'
+        - 'libapache2-mod-php'
+        - 'python-pip'
+        - 'build-essential'
+        - 'python-pexpect'
+        - 'python-pefile'
+        - 'python-crypto'
+        - 'python-openssl'
+
+    - name: Pip install dependencies
+      pip:
+        name: pymssql
+
+    - name: Clone SET dir
+      git:
+        repo: 'https://github.com/trustedsec/social-engineer-toolkit'
+        dest: /set
+
+    - name: Install SET
+      shell: python setup.py install
+      args:
+        chdir: /set
+        executable: /bin/bash

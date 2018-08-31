@@ -1,0 +1,27 @@
+---
+## GCE REGIONAL SETTINGS
+gce_ip_region: 'us-east1'
+gce_zone: "{{gce_ip_region}}-b"
+
+## GCE OS INFO
+gce_vm_disk: 15
+gce_os: 'debian-9'
+gce_vm_name: 'ansible'
+gce_vm_type: 'g1-small'
+
+## GCE NETWORKING VARS
+gce_network: 'c2-net'
+gce_net_name: "{{gce_network}}"
+gce_fw_name: "{{gce_network}}-fw"
+gce_fw_allowed: 'tcp:22,53,80,443;udp:53'
+gce_pubip_name: 'public-ip'
+
+## GCE DNS VARS
+gce_tld: ""
+
+## GCE MISC SETTINGS
+gce_tags: 'c2'
+
+## Add SSH KEYS
+gce_ssh_user: "{{lookup('pipe', 'id -un')}}"
+gce_ssh_key: "{{lookup('file', '~/.ssh/id_rsa.pub')}}"

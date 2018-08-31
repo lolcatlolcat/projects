@@ -1,0 +1,10 @@
+---
+- include: gce_create.yml
+  name: Building Infrastructure
+  tags:
+    - build
+
+- include: gce_delete.yml
+  name: Broken Arrow!!
+  tags:
+    - delete

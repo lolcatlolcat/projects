@@ -1,0 +1,16 @@
+---
+- name: Infrastructure Tasks
+  connection: local
+  hosts: localhost
+  gather_facts: no
+  roles:
+    - roles/infra
+
+- name: Prep infra for tools
+  hosts: tag_c2 
+  connection: ssh
+  become_user: root
+  become: true
+  gather_facts: yes
+  roles:
+    - roles/base

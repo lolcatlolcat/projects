@@ -1,0 +1,57 @@
+---
+- block:
+    - name: Create Public IP
+      gce_eip:
+        name: "{{gce_pubip_name}}"
+        region: "{{gce_ip_region |default('us-east1')}}"
+        state: present
+      register: ip
+
+    - debug:
+        msg: "IP is {{ip.address}}"
+
+    - name: Setup FW for VM
+      include_tasks: gce_fw.yml
+
+    - name: Create New VM
+      gce:
+        instance_names: "{{gce_vm_name | default('ansible-test')}}"
+        zone: "{{gce_zone | default('us-east1-b')}}"
+        machine_type: "{{gce_vm_type | default('g1-small')}}"
+        image: "{{gce_os | default('debian-9')}}"
+        state: present
+        disk_size: "{{gce_vm_disk | default('15')}}"
+        disk_auto_delete: yes
+        external_ip: "{{ip.address}}"
+        metadata: '{"ssh-keys":"{{gce_ssh_user}}:{{gce_ssh_key}}"}'
+        tags: "{{gce_tags | default('c2')}}"
+        network: "{{gce_network | default('c2-net')}}"
+      register: vm
+
+    - name: Create DNS Zone
+      gcdns_zone:
+        zone: "{{gce_tld}}"
+
+    - name: Create DNS Records
+      gcdns_record:
+        record: "{{item.sd}}.{{gce_tld}}"
+        zone: "{{gce_tld}}"
+        type: "{{item.type}}"
+        value:
+          - "{{ip.address + '.' if (item.type == 'NS') else ip.address}}"
+        overwrite: true
+        ttl: 60
+      register: dns
+      with_items:
+        - {sd: ns1, type: NS}
+        - {sd: ns2, type: NS}
+        - {sd: "*", type: A}
+
+    - name: Wait for SSH to come up
+      wait_for:
+        host: "{{ip.address}}"
+        port: 22
+        delay: 10
+        timeout: 60
+  tags:
+    - build

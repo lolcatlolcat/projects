@@ -1,0 +1,12 @@
+---
+packages:
+  git
+  apache2
+  python-requests
+  libapache2-mod-php
+  python-pymssql
+  build-essential
+  python-pexpect
+  python-pefile
+  python-crypto
+  python-openssl

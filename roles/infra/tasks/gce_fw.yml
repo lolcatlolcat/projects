@@ -1,0 +1,15 @@
+---
+- block:
+
+    - name: Create new network
+      gce_net:
+        name: c2-net
+        mode: auto
+        state: present
+
+    - name: Create FW rules
+      gce_net:
+        name: "{{gce_net_name}}"
+        fwname: "{{gce_fw_name}}"
+        allowed: "{{gce_fw_allowed}}"
+        state: present

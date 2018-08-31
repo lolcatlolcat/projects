@@ -1,0 +1,35 @@
+---
+- block:
+
+    - debug:
+        msg: "BROKEN ARROW; BROKEN ARROW"
+        
+    - name: Delete GCE Instance
+      gce:
+        instance_names: "{{gce_vm_name}}"
+        zone: "{{gce_zone}}"
+        state: absent
+
+    - name: Release Public IP
+      gce_eip:
+        name: "{{gce_pubip_name}}"
+        region: "{{gce_ip_region}}"
+        state: absent
+      register: ip
+       
+    - name: Remove DNS Records
+      gcdns_record:
+        record: "{{item.sd}}"
+        zone: "{{gce_tld}}"
+        type: "{{item.type}}"
+        overwrite: true
+        state: absent
+      with_items:
+        - {sd: "ns1.{{gce_tld}}.", type: NS}
+        - {sd: "ns2.{{gce_tld}}.", type: NS}
+        - {sd: "*.{{gce_tld}}", type: A}
+
+    - name: Delete DNS Zone
+      gcdns_zone:
+        zone: "{{gce_tld}}"
+        state: absent
