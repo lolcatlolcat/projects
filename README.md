@@ -1,4 +1,5 @@
-# Install Requirements
+# Automated Google Cloud Instance provision complete with public IP and DNS entries
+
 Before you can use this, you'll need to install a few things:
 
 ## MacOS
